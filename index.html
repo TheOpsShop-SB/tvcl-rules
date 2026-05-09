@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TVCL Rules Guide — Wendover CC</title>
+<style>
+  :root {
+    --navy:        #1e3a6e;
+    --navy-dark:   #162d58;
+    --navy-mid:    #2a4d8a;
+    --navy-light:  #e8edf8;
+    --navy-pale:   #f2f4fb;
+    --gold:        #c8922a;
+    --gold-light:  #fdf5e3;
+    --gold-rule:   #e0b050;
+    --text:        #1a1a1a;
+    --muted:       #5a6278;
+    --border:      #cdd3e8;
+    --bg:          #f2f4f9;
+    --white:       #ffffff;
+    --green:       #1a5c3a;
+    --green-bg:    #d8f0e4;
+    --amber:       #7a4a08;
+    --amber-bg:    #fde8c0;
+    --orange-bg:   #fde0c8;
+    --orange:      #7a3810;
+    --red:         #8a1a1a;
+    --red-bg:      #fae0e0;
+    --d6:          #1e3a6e;
+    --d6-bg:       #dce4f4;
+    --d8:          #2a5a1a;
+    --d8-bg:       #ddf0d8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--navy);
+    border-bottom: 4px solid var(--gold);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 20px 24px 18px;
+  }
+
+  .wcc-logo {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+  }
+
+  .header-text h1 {
+    font-size: 20px;
+    font-weight: normal;
+    color: white;
+    margin-bottom: 4px;
+    letter-spacing: 0.01em;
+  }
+
+  .header-text p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
+    font-style: italic;
+  }
+
+  .header-bar {
+    background: var(--navy-dark);
+    padding: 7px 24px;
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* ── Team picker — prominent first step ── */
+  .team-picker {
+    background: white;
+    border-bottom: 3px solid var(--navy-light);
+    padding: 20px 24px;
+  }
+
+  .team-picker-label {
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+  }
+
+  .team-btns {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .tbtn {
+    padding: 10px 22px;
+    border-radius: 6px;
+    border: 2px solid var(--border);
+    background: var(--bg);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all 0.15s;
+    line-height: 1.3;
+    text-align: center;
+  }
+
+  .tbtn small {
+    display: block;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .tbtn:hover { border-color: var(--navy); color: var(--navy); background: var(--navy-pale); }
+
+  .tbtn.on-d6 {
+    background: var(--d6-bg);
+    border-color: var(--navy);
+    color: var(--navy);
+  }
+
+  .tbtn.on-d8 {
+    background: var(--d8-bg);
+    border-color: var(--d8);
+    color: var(--d8);
+  }
+
+  .tbtn.on-both {
+    background: var(--navy-pale);
+    border-color: var(--navy-mid);
+    color: var(--navy-mid);
+    font-size: 12px;
+    padding: 10px 16px;
+  }
+
+  .team-hint {
+    margin-top: 10px;
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* ── Active team banner ── */
+  .active-banner {
+    display: none;
+    padding: 8px 24px;
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .active-banner.show { display: block; }
+  .active-banner.d6 { background: var(--d6-bg); color: var(--navy); }
+  .active-banner.d8 { background: var(--d8-bg); color: var(--d8); }
+
+  /* ── Main ── */
+  .main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px 20px 60px;
+  }
+
+  /* ── Section headings ── */
+  .section-head {
+    margin: 26px 0 9px;
+    padding-bottom: 7px;
+    border-bottom: 2px solid var(--navy);
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--navy);
+  }
+
+  /* ── FAQ cards ── */
+  .faq {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 5px;
+    overflow: hidden;
+    transition: box-shadow 0.15s;
+  }
+  .faq:hover { box-shadow: 0 2px 10px rgba(30,58,110,0.09); }
+
+  .faq-q {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 13px 18px;
+    font-size: 15px;
+    font-family: Georgia, serif;
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    line-height: 1.4;
+  }
+  .faq-q:hover { background: var(--bg); }
+  .faq.open .faq-q { background: var(--navy-light); color: var(--navy-dark); }
+
+  .arr {
+    font-size: 10px;
+    color: var(--border);
+    flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+  .faq.open .arr { transform: rotate(180deg); color: var(--navy); }
+
+  .faq-a {
+    display: none;
+    padding: 0 18px 18px;
+    border-top: 1px solid var(--navy-light);
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
+  }
+  .faq.open .faq-a { display: block; }
+
+  .faq-a p   { font-size: 14px; line-height: 1.65; color: var(--text); margin-top: 13px; }
+  .faq-a p+p { margin-top: 8px; }
+  .faq-a ul  { margin: 9px 0 0 16px; font-size: 14px; line-height: 1.65; color: var(--text); }
+  .faq-a li  { margin-bottom: 5px; }
+  .faq-a h4  {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.09em;
+    text-transform: uppercase; margin: 16px 0 5px; color: var(--navy);
+  }
+
+  /* ── Tags ── */
+  .tag {
+    display: inline-block;
+    font-size: 11px; font-weight: 700;
+    padding: 1px 7px; border-radius: 3px;
+    vertical-align: middle; margin: 0 1px;
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
+  }
+  .td6   { background: var(--d6-bg);    color: var(--d6); }
+  .td8   { background: var(--d8-bg);    color: var(--d8); }
+  .tboth { background: var(--green-bg); color: var(--green); }
+  .thome { background: var(--amber-bg); color: var(--amber); }
+  .taway { background: var(--orange-bg);color: var(--orange); }
+  .twarn { background: var(--red-bg);   color: var(--red); }
+
+  /* ── Callout boxes ── */
+  .box {
+    border-radius: 0 5px 5px 0;
+    border-left: 3px solid;
+    padding: 10px 14px;
+    margin-top: 12px;
+    font-size: 13.5px;
+    line-height: 1.6;
+  }
+  .bnavy { background: var(--navy-light); border-color: var(--navy); }
+  .bgold { background: var(--gold-light);  border-color: var(--gold); }
+  .bred  { background: var(--red-bg);      border-color: var(--red); }
+
+  /* ── Tables ── */
+  .t {
+    width: 100%; border-collapse: collapse;
+    margin-top: 12px; font-size: 13.5px;
+  }
+  .t th {
+    background: var(--navy); color: white;
+    padding: 7px 12px; text-align: left;
+    font-size: 12px; font-weight: 600;
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
+  }
+  .t td {
+    padding: 8px 12px; border-bottom: 1px solid #ebebeb;
+    vertical-align: top; line-height: 1.5;
+  }
+  .t tr:last-child td { border-bottom: none; }
+  .t tr:nth-child(even) td { background: var(--bg); }
+
+  /* ── Disclaimer ── */
+  .disclaimer {
+    margin-top: 36px;
+    padding: 14px 18px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--navy);
+    border-radius: 6px;
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 12px; color: var(--muted); line-height: 1.65;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <!-- Wendover CC elephant badge as SVG -->
+    <svg class="wcc-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <!-- Navy circle background -->
+      <circle cx="32" cy="32" r="31" fill="#1e3a6e" stroke="#c8922a" stroke-width="2"/>
+      <!-- Elephant body -->
+      <ellipse cx="32" cy="36" rx="16" ry="13" fill="#f0c020"/>
+      <!-- Head -->
+      <ellipse cx="22" cy="26" rx="10" ry="9" fill="#f0c020"/>
+      <!-- Ear -->
+      <ellipse cx="14" cy="27" rx="6" ry="8" fill="#e8b010"/>
+      <!-- Trunk -->
+      <path d="M14,32 Q8,36 9,44 Q10,48 14,47" stroke="#e8b010" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <!-- Tusk -->
+      <path d="M16,33 Q10,38 12,42" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <!-- Eye -->
+      <circle cx="19" cy="24" r="2" fill="#1e3a6e"/>
+      <circle cx="19.5" cy="23.5" r="0.7" fill="white"/>
+      <!-- Red chevron on body -->
+      <path d="M26,30 L32,25 L38,30 L36,30 L32,27 L28,30 Z" fill="#c8292a"/>
+      <path d="M26,34 L32,29 L38,34 L36,34 L32,31 L28,34 Z" fill="#c8292a"/>
+      <!-- Fleur-de-lis dots (simplified blue) -->
+      <circle cx="28" cy="39" r="2" fill="#3a78c8"/>
+      <circle cx="33" cy="39" r="2" fill="#3a78c8"/>
+      <circle cx="38" cy="39" r="2" fill="#3a78c8"/>
+      <!-- Legs -->
+      <rect x="21" y="47" width="5" height="8" rx="2" fill="#e8b010"/>
+      <rect x="28" y="47" width="5" height="8" rx="2" fill="#e8b010"/>
+      <rect x="35" y="47" width="5" height="8" rx="2" fill="#e8b010"/>
+      <!-- Base stripe: red/white -->
+      <rect x="10" y="54" width="44" height="4" rx="1" fill="#c8292a"/>
+      <rect x="14" y="54" width="4" height="4" fill="white"/>
+      <rect x="22" y="54" width="4" height="4" fill="white"/>
+      <rect x="30" y="54" width="4" height="4" fill="white"/>
+      <rect x="38" y="54" width="4" height="4" fill="white"/>
+    </svg>
+
+    <div class="header-text">
+      <h1>Wendover Cricket Club — TVCL Rules Guide</h1>
+      <p>Division 6 (First Team) &amp; Division 8 (Second Team) · Win/Lose format · 12:30pm start</p>
+    </div>
+  </div>
+  <div class="header-bar">Based on TVCL Match Guidance &amp; Rules, April 2026 · tvlcricket.uk</div>
+</header>
+
+<!-- Active banner shown after picking -->
+<div id="banner" class="active-banner"></div>
+
+<!-- Team picker as prominent first step -->
+<div class="team-picker">
+  <div class="team-picker-label">Step 1 — Select your team</div>
+  <div class="team-btns">
+    <button class="tbtn" id="btn-d6" onclick="setDiv('d6')">
+      Division 6
+      <small>First Team</small>
+    </button>
+    <button class="tbtn" id="btn-d8" onclick="setDiv('d8')">
+      Division 8
+      <small>Second Team</small>
+    </button>
+    <button class="tbtn on-both" id="btn-both" onclick="setDiv('both')">
+      Show both
+    </button>
+  </div>
+  <div class="team-hint" id="team-hint">Select your team above — answers will highlight what applies to you.</div>
+</div>
+
+<div class="main">
+
+  <!-- ══ BEFORE THE MATCH ══ -->
+  <div class="section-head">Before the match</div>
+
+  <div class="faq">
+    <button class="faq-q" onclick="tog(this)">What needs to happen at the toss?<span class="arr">▼</span></button>
+    <div class="faq-a">
+      <p>The toss must take place <strong>no earlier than 30 minutes and no later than 15 minutes</strong> before the 12:30pm start. Both Captains and any Umpires are expected to attend.</p>
+      <p>If the designated Captain hasn't arrived but at least <strong>7 players from each team</strong> are present, the toss must proceed without them. Play then starts within 15 minutes.</p>
+      <h4>At the toss, Captains must agree:</h4>
+      <ul>
+        <li>Drink break timing — normally at the midpoint of each innings</li>
+        <li>Wide ball interpretation — if no 17-inch crease marking is on the field</li>
+      </ul>
+      <h4>Balls are inspected and team sheets exchanged:</h4>
+      <ul>
+        <li>Home Team provides 2 new TVCL balls + 2 spare new + at least 6 other spare TVCL balls — red ball for both divisions</li>
+        <li>Once the match starts, no player changes are permitted</li>
+      </ul>
+      <div class="box bgold">If the Home Team cannot provide 2 new TVCL balls, the match may continue with lower grade balls only if Umpires and both Captains agree — but the Home Team forfeits the toss.</div>
+    </div>
+  </div>
+
+  <div class="faq">
+    <button class="faq-q" onclick="tog(this)">What do we need to check before play begins?<span class="arr">▼</span></button>
+    <div class="faq-a">
+      <h4>Team sheet <span class="tag twarn">Penalty</span></h4>
+      <p>Complete the team sheet before the toss. No player may appear as 'Unregistered', 'Unsure' or 'Free Text' on the Play-Cricket scorecard. Each team with ineligible players receives a <strong>5 penalty point deduction</strong>.</p>
+      <h4>Youth players</h4>
+      <p>All players aged Under 19 or younger must be declared to the Captain, Umpires and Scorers before the match — whether they are bowling or not.</p>
+      <h4>30-yard ring <span class="tag thome">Home</span></h4>
+      <p>Must be marked in both divisions: two semi-circles of 30 yards radius from each middle stump, joined by straight lines, marked with dots at approximately 5-yard intervals.</p>
+      <h4>Clothing</h4>
+      <p>Both divisions: predominantly white. Kit, armbands and visible undergarments must not be the same or similar colour as the red match ball.</p>
+    </div>
+  </div>
+
+  <div class="faq">
+    <button class="faq-q" onclick="tog(this)">What if we don't have an umpire?<span class="arr">▼</span></button>
+    <div class="faq-a">
+      <p>Panel Umpires are only appointed for Divisions 1, 1B and 2. Each team in Div 6 and Div 8 is expected to provide a <strong>League Registered Umpire or Club Umpire</strong>. If neither team has one, the Captains jointly take responsibility.</p>
+      <div class="box bnavy"><strong>Bonus point:</strong> each team providing a League Registered or Panel Umpire earns <strong>1 bonus point</strong> — provided they officiate the full match, are present at the toss, and are named on the Play-Cricket scorecard by 10:00pm Wednesday. Unregistered Club Umpires and Player Umpires do not qualify.</div>
+      <div class="box bred" style="margin-top:8px">Falsely claiming a League Registered Umpire: first offence = 5 penalty points; second and subsequent = 9 penalty points each time.</div>
+    </div>
+  </div>
+
+  <div class="faq">
+    <button class="faq-q" onclick="tog(this)">What if the pitch changes after the toss?<span class="arr">▼</span></button>
+    <div class="faq-a">
+      <p>The toss cannot take place until the pitch has been prepared and marked by the Grounds Authority.</p>
+      <p>If the pitch is <strong>altered for any reason after the toss but before the match starts</strong>, the Umpires arrange a <strong>new toss</strong> and delay the start accordingly. Once the match has commenced, no retoss takes place.</p>
+    </div>
+  </div>
+
+  <!-- ══ DURING THE MATCH ══ -->
+  <div class="section-head">During the match</div>
+
+  <div class="faq">
+    <button class="faq-q" onclick="tog(this)">What are the fielding restrictions?<span class="arr">▼</span></button>
+    <div class="faq-a">
+      <table class="t">
+        <tr><th>Rule</th><th>Div 6</th><th>Div 8</th></tr>
+        <tr><td>Max fielders on leg side</td><td>5 — entire match</td><td>5 — entire match</td></tr>
+        <tr><td>Max fielders outside the 30-yard ring</td><td>5 — entire innings</td><td><em>No restriction</em></td></tr>
+      </table>
+      <p>Both restrictions judged <strong>at the instant of delivery</strong>. Any infringement = no ball.</p>
+      <div class="box bnavy">The 30-yard ring must be marked in both divisions, even though Div 8 has no restriction on fielders outside it.</div>
+    </div>
+  </div>
+
+  <div class="faq">
+    <button class="faq-q" onclick="tog(this)">How many overs can a bowler bowl?<span class="arr">▼</span></button>
+    <div class="faq-a">
+      <p>Each bowler may bowl a maximum of <strong>1/5th of the innings total</strong>.</p>
+      <table class="t">
+        <tr><th></th><th>Div 6</th><th>Div 8</th></tr>
+        <tr><td>Full innings</td><td>45 overs → max <strong>9</strong> per bowler</td><td>40 overs → max <strong>8</strong> per bowler</td></tr>
+        <tr><td>Reduced innings</td><td colspan="2">See Appendix 6 of the full rules for all reduced-over limits</td></tr>
+      </table>
+      <p>If overs are reduced mid-innings and a bowler has already exceeded the new limit, they cannot bowl further — but may complete an over in progress. If a bowler is incapacitated mid-over, the remaining balls are bowled by another bowler who did not bowl the previous over. Each part-over counts as a full over toward both bowlers' limits.</p>
+    </div>
+  </div>
+
+  <div class="faq">
+    <button class="faq-q" onclick="tog(this)">What counts as a no ball, and what happens next?<span class="arr">▼</span></button>
+    <div class="faq-a">
+      <h4>No ball triggers</h4>
+      <ul>
+        <li>Bowler oversteps the crease</li>
+        <li>Short-pitched delivery that bounces and <strong>clearly passes over head height</strong> of the batter standing upright at the crease</li>
+        <li>Fielding restriction breach (leg side or ring)</li>
+      </ul>
+      <h4>Penalty and free hit</h4>
+      <table class="t">
+        <tr><th></th><th>Div 6 &amp; 8</th><th>Div 1, 1B &amp; 2 (for reference)</th></tr>
+        <tr><td>No ball penalty</td><td>1 run</td><td>2 runs</td></tr>
+        <tr><td>Free hit follows?</td><td>Yes — next delivery</td><td>Yes</td></tr>
+      </table>
+      <p>On the free hit the batter can only be dismissed in ways that apply on a no ball. Field changes are not permitted for the same batter — except to correct a fielding restriction breach, or for any fielder within 15 yards of the striker to retreat to no more than 15 yards away.</p>
+    </div>
+  </div>
+
+  <div class="faq">
+    <button class="faq-q" onclick="tog(this)">What are the youth player rules?<span class="arr">▼</span></button>
+    <div class="faq-a">
+      <p>All Under 19 players must be declared before the match. Both Captains must be aware of them.</p>
+      <h4>Bowling limits</h4>
+      <table class="t">
+        <tr><th>Age group</th><th>Max overs per spell</th><th>Max overs per day</th></tr>
+        <tr><td>Under 15 (age 14–15)</td><td>5</td><td>12</td></tr>
+        <tr><td>Under 17 (age 16–17)</td><td>6</td><td>15</td></tr>
+        <tr><td>Under 19 (age 18–19)</td><td>7</td><td>18</td></tr>
+      </table>
+      <h4>Minimum fielding distances from batter</h4>
+      <table class="t">
+        <tr><th>Age group</th><th>Minimum distance</th></tr>
+        <tr><td>Under 15</td><td>8 yards (7.3 metres)</td></tr>
+        <tr><td>Under 17</td><td>6 yards — helmet and abdominal protector required</td></tr>
+        <tr><td>Under 19</td><td>No restriction</td></tr>
+      </table>
+      <div class="box bred">If any limit is breached, suspend play immediately. Resume only once correct equipment is fitted or the player moves to a compliant position.</div>
+    </div>
+  </div>
+
+  <div class="faq">
+    <button class="faq-q" onclick="tog(this)">Can we use a substitute fielder?<span class="arr">▼</span></button>
+    <div class="faq-a">
+      <p>Yes — in the event of injury, any member of the same club may act as a substitute fielder provided they are not serving a suspension and are at least 13 years of age (or a registered Cat1B player). A substitute who has played in another TVCL match the same day is still eligible.</p>
+      <div class="box bnavy">A substitute fielder <strong>cannot bat or bowl</strong>. The original player may return to bat or bowl once recovered.</div>
+    </div>
+  </div>
+
+  <div class="faq">
+    <button class="faq-q" onclick="tog(this)">Can we declare?<span class="arr">▼</span></button>
+    <div class="faq-a">
+      <p><strong>No.</strong> Declarations are not permitted in Win/Lose format. The innings continues until the batting team is all out or their maximum overs are completed. This applies to both Division 6 and Division 8.</p>
+    </div>
+  </div>
+
+  <!-- ══ WEATHER & DELAYS ══ -->
+  <div class="section-head">Weather &amp; delays</div>
+
+  <div class="faq">
+    <button class="faq-q" onclick="tog(this)">What is the latest we can start?<span class="arr">▼</span></button>
+    <div class="faq-a">
+      <table class="t">
+        <tr><th></th><th>Div 6 &amp; Div 8</th></tr>
+        <tr><td>Scheduled start</td><td>12:30pm</td></tr>
+        <tr><td>Latest start</td><td><strong>4:00pm</strong></td></tr>
+        <tr><td>Minimum overs for a result</td><td>20 overs per innings</td></tr>
+      </table>
+      <p>The Home Team must make every effort to get the ground ready for the original start and continue doing so up to 4:00pm. If no play has been possible by 4:00pm, the match is declared a cancelled washout.</p>
+      <div class="box bred">A team with 5 or fewer players at the venue at the latest start time is deemed to have forfeited the match.</div>
+    </div>
+  </div>
+
+  <div class="faq">
+    <button class="faq-q" onclick="tog(this)">What if it rains — can we call it off early?<span class="arr">▼</span></button>
+    <div class="faq-a">
+      <p>Matches <strong>cannot</strong> be called off due to weather before 4:00pm, except in specific circumstances:</p>
+      <h4>Between 8am and 11:30am</h4>
+      <p>The Home Team may advise the Away Team not to travel — but must offer them the option to come and inspect. If the Away Team agrees no play is possible and declines to travel, the Home Team submits the result as a cancelled washout.</p>
+      <h4>After 11:30am — no Panel or League Registered Umpire present</h4>
+      <p>Both Captains must agree. If either believes play can start by 4:00pm, the match cannot be cancelled until that time. If the toss hasn't happened, the decision is taken 15 minutes before 4:00pm.</p>
+      <div class="box bgold">Weather forecasts must not be used when assessing fitness for play. The decision must be based on actual ground conditions at the time.</div>
+    </div>
+  </div>
+
+  <div class="faq">
+    <button class="faq-q" onclick="tog(this)">What happens when overs are lost to rain?<span class="arr">▼</span></button>
+    <div class="faq-a">
+      <h4>Interruption in the 1st innings</h4>
+      <p>The first <strong>30 cumulative minutes</strong> lost are ignored. After that, <strong>2 overs are deducted</strong> (1 per innings) for every completed 7 minutes lost. At the end of the 1st innings, a revised target is calculated using the <strong>DLS method</strong>.</p>
+      <h4>Interruption in the 2nd innings</h4>
+      <p>Once the 30-minute allowance is used up, <strong>1 over is deducted</strong> for every completed 3.5 minutes lost — down to a minimum of 20 overs. Every reduction triggers a new DLS target. Umpires confirm the revised target with Scorers and inform both Captains before resuming.</p>
+      <h4>1st innings cut-off — no rain interruption</h4>
+      <p>If there has been no rain interruption, the 1st innings is deemed completed at <strong>4:00pm</strong> — provided at least 20 overs have been bowled. Any over in progress at 4:00pm is completed. The 2nd innings receives the same number of completed overs.</p>
+      <div class="box bnavy">DLS calculations are done using Play-Cricket Scorer. The team batting second is responsible for updating the scoreboard including the par score.</div>
+    </div>
+  </div>
+
+  <div class="faq">
+    <button class="faq-q" onclick="tog(this)">What if there's lightning?<span class="arr">▼</span></button>
+    <div class="faq-a">
+      <p>The TVCL follows the <strong>ECB 30/30 rule</strong>:</p>
+      <ul>
+        <li>Suspend play and seek shelter <strong>immediately</strong> when the gap between lightning flash and thunder is 30 seconds or less</li>
+        <li>Safe to return <strong>30 minutes after the last flash or clap of thunder</strong> — only if Umpires agree the storm has passed</li>
+        <li>Earlier return possible if both Umpires agree the storm has clearly moved on</li>
+      </ul>
+      <div class="box bred">Do not shelter under trees. Do not go near metal-framed pitch covers or machinery. Move indoors and spread out — do not bunch together.</div>
+    </div>
+  </div>
+
+  <!-- ══ RESULTS & POINTS ══ -->
+  <div class="section-head">Results &amp; points</div>
+
+  <div class="faq">
+    <button class="faq-q" onclick="tog(this)">How does the points system work?<span class="arr">▼</span></button>
+    <div class="faq-a">
+      <table class="t">
+        <tr><th>Result</th><th>Points</th></tr>
+        <tr><td>Win</td><td>22</td></tr>
+        <tr><td>Tie</td><td>14 each</td></tr>
+        <tr><td>Loss</td><td>0 (bonus points available)</td></tr>
+        <tr><td>Abandoned or cancelled washout</td><td>7 each</td></tr>
+        <tr><td>Forfeited — opposing team</td><td>22</td></tr>
+        <tr><td>Forfeited — forfeiting team</td><td>0 + 5 penalty points deducted</td></tr>
+      </table>
+      <h4>Bonus points — available on a loss</h4>
+      <ul>
+        <li><strong>Batting 1st innings:</strong> 1pt for 100+ runs, 2 for 125+, 3 for 150+, 4 for 175+, 5 for 200+</li>
+        <li><strong>Bowling vs 1st innings:</strong> points per wicket taken, scaling from 0 (1 wicket) to 8 (all out)</li>
+        <li><strong>Batting 2nd innings:</strong> fixed points for runs scored plus points for the % of the 1st innings target reached</li>
+      </ul>
+      <p>See the full rules document for complete bonus point tables.</p>
+    </div>
+  </div>
+
+  <div class="faq">
+    <button class="faq-q" onclick="tog(this)">What counts as a tie?<span class="arr">▼</span></button>
+    <div class="faq-a">
+      <p>A tie is declared when the scores are level <strong>or 1 run less than the target</strong> at the completion of the match — regardless of wickets lost. Both teams receive 14 points. No bonus points are available on a tie.</p>
+    </div>
+  </div>
+
+  <div class="faq">
+    <button class="faq-q" onclick="tog(this)">What if we have to forfeit a match?<span class="arr">▼</span></button>
+    <div class="faq-a">
+      <h4>Priority rule</h4>
+      <p>If the club cannot field all teams on the same day, the <strong>highest division fixture always takes priority</strong>. If this rule is breached, all lower teams also forfeit their matches.</p>
+      <h4>Notification process</h4>
+      <ul>
+        <li>Notify the Opposing Team first and get acknowledgement</li>
+        <li>Notify the Divisional Results Secretary without delay</li>
+        <li>Submit the result on the Match Result Form without delay</li>
+      </ul>
+      <table class="t" style="margin-top:12px">
+        <tr><th>Situation</th><th>Penalty</th></tr>
+        <tr><td>Any forfeited match</td><td>5 penalty points to forfeiting team</td></tr>
+        <tr><td>Forfeit notified after 10:00pm Wednesday</td><td>Further 5 penalty points (MC discretion)</td></tr>
+        <tr><td>Failure to notify promptly</td><td>£20 fine + Away Team's reasonable travel costs</td></tr>
+        <tr><td>5 forfeits in one season</td><td>Must reapply to Management Committee by 31st October</td></tr>
+        <tr><td>7 forfeits in one season</td><td>Management Committee may withdraw team immediately</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ FOR SCORERS ══ -->
+  <div class="section-head">For scorers</div>
+
+  <div class="faq">
+    <button class="faq-q" onclick="tog(this)">Do we need to provide a scorer?<span class="arr">▼</span></button>
+    <div class="faq-a">
+      <p>The mandatory scorer rule — with a 1 point deduction — applies only in <strong>Divisions 1, 1B and 2</strong>. There is no penalty for Div 6 or Div 8 for not providing a dedicated scorer.</p>
+      <p>That said, a scorer is <strong>strongly recommended</strong> and the TVCL endorses Play-Cricket Scorer Pro. A scorer who cannot keep an accurate scorebook, acknowledge Umpire signals correctly, or assist with DLS timing is considered incompetent for the purposes of the Umpire's match report.</p>
+      <div class="box bnavy">The scorer should be briefed by the Umpires before play: confirm match format, hours of play, boundary allowances, master clock, display of runs/wickets/overs, and pre-signals.</div>
+    </div>
+  </div>
+
+  <div class="faq">
+    <button class="faq-q" onclick="tog(this)">What does the scorer need to do during play?<span class="arr">▼</span></button>
+    <div class="faq-a">
+      <ul>
+        <li>Keep an accurate scorebook — online (Play-Cricket Scorer Pro) or hard copy</li>
+        <li>Acknowledge signals from the Umpires during play</li>
+        <li>Keep a check on the score jointly with the Umpires</li>
+        <li>Display runs, wickets and overs visibly from the pitch</li>
+        <li>Note the time of all stoppages — essential for over-rate calculations and DLS</li>
+      </ul>
+      <h4>DLS par score display — Division 6 <span class="tag td6">Div 6</span></h4>
+      <p>The scorer (or DLS Manager) must display the <strong>par score visibly from the pitch</strong> at the end of each over and at the fall of each wicket in the 2nd innings — even if there has been no loss of overs. Failure to do so is reported to the Management Committee and repeated failures result in a 5 penalty point deduction.</p>
+      <h4>DLS par score display — Division 8 <span class="tag td8">Div 8</span></h4>
+      <p>The team batting second is responsible for regularly updating the scoreboard including the par score using Play-Cricket Scorer.</p>
+      <div class="box bgold">Spare balls are ideally kept with the Scorers under their control, with restricted access. Umpires will confirm this at the toss.</div>
+    </div>
+  </div>
+
+  <!-- ══ AFTER THE MATCH ══ -->
+  <div class="section-head">After the match</div>
+
+  <div class="faq">
+    <button class="faq-q" onclick="tog(this)">What do we need to submit and when?<span class="arr">▼</span></button>
+    <div class="faq-a">
+      <table class="t">
+        <tr><th>Task</th><th>Who</th><th>Deadline</th></tr>
+        <tr><td>Submit match result on Play-Cricket</td><td><span class="tag thome">Home</span></td><td>Same day, by 11:00pm</td></tr>
+        <tr><td>Complete match scorecard on Play-Cricket</td><td><span class="tag thome">Home</span></td><td>By 11:00pm Monday</td></tr>
+        <tr><td>Validate and confirm scorecard on Play-Cricket</td><td><span class="tag taway">Away</span></td><td>By 11:00pm Tuesday</td></tr>
+        <tr><td>Captain's Match Report Form (CMRF) on TVCL24</td><td><span class="tag tboth">Both</span></td><td>By 11:00pm Monday</td></tr>
+        <tr><td>Umpire bonus point claim (if applicable)</td><td><span class="tag tboth">Both</span></td><td>By 10:00pm Wednesday</td></tr>
+      </table>
+      <div class="box bred" style="margin-top:12px">If the match result is not submitted or is incorrect, correct it by 11:00pm Sunday or face 5 penalty points on top of any fine. Scorecards lock at midnight Tuesday. Away team: check the Home Team has submitted correctly.</div>
+      <div class="box bgold" style="margin-top:8px">Late submission fines: £25 per occurrence (1st &amp; 2nd); 3 penalty points from the 3rd occurrence. Still outstanding 1 week after the deadline = additional 5 penalty points on top.</div>
+    </div>
+  </div>
+
+  <div class="faq">
+    <button class="faq-q" onclick="tog(this)">What goes in the Captain's Match Report?<span class="arr">▼</span></button>
+    <div class="faq-a">
+      <p>Both Home and Away Captains submit a CMRF on TVCL24 by 11:00pm Monday covering:</p>
+      <ul>
+        <li><strong>Match status</strong> — select the correct result from the dropdown</li>
+        <li><strong>Pitch and outfield marks</strong> — Away Captain only. Default 3 = Acceptable. Score 2 or below requires an explanation. Key criterion for pitch: consistency of bounce. Key criterion for outfield: whether fielders could attack the ball safely.</li>
+        <li><strong>Fair play mark</strong> — rate the opposition 1–10. Marks below 4 require an explanation. This does not trigger a disciplinary process.</li>
+      </ul>
+      <div class="box bnavy">Fair play marks and formal disciplinary reports are separate. A low fair play mark alone does not start disciplinary proceedings — report conduct incidents separately via the TVCL disciplinary process.</div>
+    </div>
+  </div>
+
+  <div class="faq">
+    <button class="faq-q" onclick="tog(this)">What if a player behaved badly?<span class="arr">▼</span></button>
+    <div class="faq-a">
+      <p>In Divisions 6 and 8, in-match conduct penalties are <strong>not applied</strong> by Umpires. Misconduct is reported after the match through the <strong>TVCL disciplinary process</strong>.</p>
+      <p>Captains are responsible for the behaviour of their players at all times. A report goes to the league and the opposition team; the opposition is expected to deal with it promptly.</p>
+      <div class="box bgold">Note details during the match — names, over, ball, nature of the incident. The report is submitted after the match, not during it.</div>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    This guide is a plain-English summary based on the TVCL Match Guidance &amp; Rules (April 2026). It covers Divisions 6 and 8 only — rules differ in other divisions. Always refer to the full rulebook for anything contentious or not covered here: <strong>tvlcricket.uk/cricket-league-downloads/guides</strong>
+  </div>
+
+</div>
+
+<script>
+function tog(btn) {
+  const item = btn.closest('.faq');
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq.open').forEach(el => el.classList.remove('open'));
+  if (!wasOpen) item.classList.add('open');
+}
+
+function setDiv(div) {
+  // Update buttons
+  document.getElementById('btn-d6').className   = 'tbtn' + (div === 'd6'   ? ' on-d6'   : '');
+  document.getElementById('btn-d8').className   = 'tbtn' + (div === 'd8'   ? ' on-d8'   : '');
+  document.getElementById('btn-both').className = 'tbtn' + (div === 'both' ? ' on-both' : '');
+
+  // Update banner
+  const banner = document.getElementById('banner');
+  if (div === 'd6') {
+    banner.className = 'active-banner show d6';
+    banner.textContent = 'Showing: Division 6 — First Team';
+  } else if (div === 'd8') {
+    banner.className = 'active-banner show d8';
+    banner.textContent = 'Showing: Division 8 — Second Team';
+  } else {
+    banner.className = 'active-banner';
+    banner.textContent = '';
+  }
+
+  // Update hint
+  document.getElementById('team-hint').textContent =
+    div === 'both'
+      ? 'Showing both divisions — select a team above to highlight what applies to you.'
+      : 'You can switch teams at any time using the buttons above.';
+}
+</script>
+</body>
+</html>
